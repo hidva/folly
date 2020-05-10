@@ -33,6 +33,11 @@ namespace folly {
 
 /**
  * UDP socket
+ * 
+ * 根据该类提供的 API 来看, 虽然 AsyncUDPSocket 在构造时必须指定一个 EventBase, 但
+ * AsyncUDPSocket 的 I/O 都可以不经过 EventBase 而是直接调用对应的系统函数.
+ * 而且 AsyncUDPSocket 的 write 始终是不走 EventBase 的, 每次都是直接调用系统函数.
+ * 而 read 则可以通过 resumeRead() 使用 EventBase loop 机制.
  */
 class AsyncUDPSocket : public EventHandler {
  public:
@@ -143,6 +148,8 @@ class AsyncUDPSocket : public EventHandler {
    * set in the `address` an ephemeral port is chosen and you can
    * use `address()` method above to get it after this method successfully
    * returns.
+   * 
+   * 此时总会新建一个套接字描述符.
    */
   virtual void bind(const folly::SocketAddress& address);
 
@@ -216,6 +223,7 @@ class AsyncUDPSocket : public EventHandler {
       const struct iovec* vec,
       size_t iovec_len);
 
+  // 等同于对应系统调用的封装.
   virtual ssize_t recvmsg(struct msghdr* msg, int flags);
 
   virtual int recvmmsg(

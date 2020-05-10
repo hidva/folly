@@ -35,6 +35,9 @@ class EventBase;
  *
  * Users that wish to wait on I/O events should derive from EventHandler and
  * implement the handlerReady() method.
+ * 
+ * 很显然 EventHandler 要注册到某个 EventBase 上, 由该 EventBase 负责 poll fd, 并且在
+ * fd 可用时调用 EventHandler::handerReady. 
  */
 class EventHandler {
  public:

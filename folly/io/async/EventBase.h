@@ -110,6 +110,7 @@ class RequestEventBase : public RequestData {
 class VirtualEventBase;
 
 /**
+ * 看注释就行. 可参考 EventHandler 来了解如何注册一个 fd.
  * This class is a wrapper for all asynchronous I/O processing functionality
  *
  * EventBase provides a main loop that notifies EventHandler callback objects
